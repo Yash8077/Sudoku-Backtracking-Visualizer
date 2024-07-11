@@ -96,6 +96,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 - [fireworks.js](https://github.com/crashmax-dev/fireworks-js): Library used for the fireworks effect.
 
----
 
 Enjoy solving and visualizing Sudoku puzzles!
