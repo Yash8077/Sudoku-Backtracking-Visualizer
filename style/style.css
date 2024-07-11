@@ -74,8 +74,8 @@ body {
     white-space: nowrap;
 }
 .logo{
-    text-align: center; /* Centers the text within the heading element */
-    display: block; /* Ensures the heading is treated as a block element */
+    text-align: center; 
+    display: block;
     margin-left: auto;
     margin-right: auto;
     font-size: 3rem;
@@ -294,8 +294,8 @@ body {
     /* margin: auto; */
     margin: auto;
     border-collapse: collapse;
-    width: 378px;
-    height: 395px; 
+    width: auto;
+    height: auto; 
     
 }
 
@@ -346,6 +346,7 @@ tr:nth-child(3n) td
     text-align: center;
     font-size: 30px;
     outline: rgba(255, 222, 173, 0);
+    gap: 5px;
 }
 .cell:hover{
     transform: scale(1.1);
@@ -379,6 +380,10 @@ tr:nth-child(3n) td
     }
     #footer-navbar{
         margin-top: 30px;
+    }
+    .cell input{
+        width:30px;
+        height:30px;
     }
 }
 #footer-navbar {
