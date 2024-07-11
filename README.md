@@ -1,6 +1,7 @@
 
 ```markdown
 # Sudoku Solver Visualizer
+![image](https://github.com/Yash8077/Sudoku-Backtracking-Visualizer/assets/39164064/ee80b1ac-e0bc-48f8-9669-eeedbe7a1007)
 
 Welcome to the Sudoku Solver Visualizer! This project is a web-based application that allows you to visualize the process of solving Sudoku puzzles using different algorithms. It includes features like random puzzle generation, various solving speeds, and visual effects to celebrate a solved puzzle.
 
