@@ -1,5 +1,5 @@
 
-```markdown
+
 # Sudoku Solver Visualizer
 ![image](https://github.com/Yash8077/Sudoku-Backtracking-Visualizer/assets/39164064/ee80b1ac-e0bc-48f8-9669-eeedbe7a1007)
 
