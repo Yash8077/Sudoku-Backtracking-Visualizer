@@ -1,18 +1,16 @@
 // Get some element from html
-const subMenu = document.querySelector("#nav-bar").children[4].children[1];         
-const speedButton = document.querySelector("#nav-bar").children[4].children[0];
-const SpeedMenu = document.querySelector("#nav-bar").children[4];
-const AlgoMenu = document.querySelector("#nav-bar").children[5];
-const container=document.querySelector(".fireworkDiv");
+const subMenu = document.querySelector("#nav-bar .sub-menu");         
+const speedButton = document.querySelector("#nav-bar .selected");
+const SpeedMenu = document.querySelector("#nav-bar li span.selected").closest('li');
+const AlgoMenu = document.querySelector("#nav-bar #solve").closest('li');
+const container = document.querySelector(".fireworkDiv");
 const solve = document.querySelector("#solve");
 const clear = document.querySelector("#clear");
+const backNo=document.querySelector("#noback");
 const randomlyFill = document.querySelector("#randomly-fill");
 const grid = document.querySelector("#grid");
-const inputs = document.getElementsByTagName('input');
-const algoInfo = document.querySelector("#algo-info-info");
-const algoHeader = document.querySelector("#algo-info-header");
-const algoInfoWraper = document.querySelector("#algo-info");
-
+const inputs = document.querySelectorAll('#grid input[type="text"]');
+const gridCells = document.querySelectorAll('.cell input'); 
 // START Dropdown menu (Speed)
 const speedDropDown = document.querySelector("span.selected");
 const speedOptions = document.querySelectorAll('.speed-options');
@@ -72,21 +70,48 @@ const fireworks = new Fireworks(container, {
       max: 1
     }
   })
+
 function startFireworks() {
     fireworks.start();
     setTimeout(() => fireworks.stop(), 5000);  // Stop fireworks after 5 seconds
 }
 // START Dropdown menu (Algorithms)
-const algorithmsDropDown = document.querySelector("span.algo-selected");
-const algorithmsOptions = document.querySelectorAll('.algo-options');
-algorithmsOptions.forEach(e => {
-    e.addEventListener("click", () => {
-        let value = e.innerHTML;
-        algorithmsDropDown.innerHTML = value;
-        setAlgoInfo(value);
-    });
-});
+const algorithmsDropDown = "Backtracking";
 // DONE Dropdown menu (Algorithms)
+function showSuccessToast() {
+    const toast = document.getElementById("successToast");
+    toast.textContent="✅ Sudoku solved successfully";
+    toast.classList.add("show");
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000); // Hide after 3 seconds
+}
+function noSolToast() {
+    const toast = document.getElementById("failToast");
+    toast.textContent="❌ No Solution Possible!";
+    toast.classList.add("show");
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000); // Hide after 3 seconds
+    clickedClear();
+}
+function invalidInput(){
+    const toast = document.getElementById("failToast");
+    toast.textContent="❌ Invalid input entered. Please enter numbers from 1-9";
+    toast.classList.add("show");
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000); // Hide after 3 seconds
+}
+function gradientApplied() {
+    const toast = document.getElementById("successToast");
+    toast.textContent="🖌️ Gradient Applied";
+    toast.classList.add("show");
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000); // Hide after 3 seconds
+}
+
 
 // CONSTANT SPEED (The lower the faster. It actually is the time lapse between 2 animation)
 const FAST_SPEED = 0.4;
@@ -99,27 +124,7 @@ clear.addEventListener('click', clickedClear);
 randomlyFill.addEventListener('click', clickedRandomlyFill);
 solve.addEventListener('click', clickedSolve);
 
-function setAlgoInfo(algoName)
-{
-    let description = "";
 
-    if(algoName === "Backtracking")
-    {
-        description = "Sudoku Backtracking is a recursive algorithm which goes through each cells and sequentially assigns numbers from 1 to 9 if the cell is empty.<br/><br/>" +  
-
-        "After each assignment, we check whether the current board is valid, and recursively go to the next cell if it is.<br/><br/>" + 
-        
-        "If we reach the last (bottom right corner) cell, and we have a valid assignment to that cell, we have a solution.<br/><br/>" +
-        
-        "If we have tried all possible values from 1 to 9 on a cell, and no values lead to a solution, we backtrack (go back to the previous cell) and continue where we left off (continue to assign the next number).";
-    }
-    
-
-    algoInfoWraper.classList.add('algo-info-class');
-
-    algoHeader.innerHTML = "Algorithm Information";
-    algoInfo.innerHTML = description;
-}
 
 
 
@@ -131,11 +136,14 @@ function setAlgoInfo(algoName)
 function clickedClear(e)
 {
     clear.textContent="Clear";
+    solve.textContent="Solve";
+    solve.style.backgroundColor="";
+    backNo.style.borderColor = "";
+    backNo.textContent="";
     fireworks.stop();
-    clearAllTimeOuts();
+    clearAnimTimeOuts();
     clearAllColors();
-    clearAlgoInfo();
-    setAllowSolveSpeedAndAlgorithms();
+    allowSolving();
     clear.style.backgroundColor = "";
     for(let i = 0; i < 9; i++)
     {
@@ -149,7 +157,7 @@ function clickedClear(e)
 
 
 // This function delete all timeOut (animations)
-function clearAllTimeOuts()
+function clearAnimTimeOuts()
 {
     while(animTimeout >= 0)
     {
@@ -168,16 +176,9 @@ function clearAllColors()
     }
 }
 
-// Clear Algo description   
-function clearAlgoInfo()
-{
-    algoInfoWraper.classList.remove('algo-info-class');
-    algoHeader.innerHTML = "";
-    algoInfo.innerHTML = "";
-}
 
 // Allow to click solve, choose speed and algorithms again
-function setAllowSolveSpeedAndAlgorithms()
+function allowSolving()
 {
     
     solve.setAttribute("style", "cursor: pointer"); // Allow to click solve button
@@ -191,13 +192,15 @@ function setAllowSolveSpeedAndAlgorithms()
 // Not allow to click solve, choose speed and algorithms
 function setNotAllowSolveSpeedAndAlgorithms()
 {
-    solve.style.backgroundColor = "red";    // Turn solve button to red
+    solve.style.backgroundColor = "red";
+    solve.style.borderRadius = "30px";
+    solve.textContent="Solving";    // Turn solve button to red
     solve.style.cursor = "not-allowed";     // Change cursor mode
     solve.removeEventListener('click', clickedSolve);   // Remove any function when click
     clear.textContent="Stop & Clear";
     randomlyFill.setAttribute("style","pointer-events: none");
     SpeedMenu.setAttribute("style", "pointer-events: none"); // Cannot click Speed menu
-    AlgoMenu.setAttribute("style", "pointer-events: none"); // Cannot click Algorithms menu
+
 }
 
 
@@ -314,7 +317,7 @@ function swapCol(matrix, col1, col2)
     }
 }
 
-// This function actually generate a random board
+// This function generates a fully random board
 function generateRandomBoard()
 {
     let numFill = 20 + Math.floor((Math.random() * 8));
@@ -356,11 +359,8 @@ function clickedSolve(e)
     if(speedDropDown.innerHTML === "Speed") // If haven't set speed
         speedDropDown.innerHTML = "Medium"; // Set to medium
 
-    if(algorithmsDropDown.innerHTML === "Algorithms") // If haven't set Algorithms yet
-    {
-        algorithmsDropDown.innerHTML = "Backtracking"; // Set to Backtracking
-        setAlgoInfo("Backtracking");                    // And turn on info
-    }
+    
+    algorithmsDropDown.innerHTML = "Backtracking"; // Set to Backtracking
     
     let currentAlgo = getCurrentAlgorithm();
 
@@ -375,7 +375,7 @@ function clickedSolve(e)
 //------------------------------------------------START Backtracking-------------------------------------------------
 function solveByBacktracking(e, currentAlgo)
 {
-    backtrackingCountToPreventHanging = 0;
+    backtrackingTotalCount = 0;
     setNotAllowSolveSpeedAndAlgorithms();   // Disable some buttons
     let matrix = readValue();               // Read values from web board
 
@@ -394,12 +394,12 @@ function solveByBacktracking(e, currentAlgo)
     {
         
         animTimeout = setTimeout(alertNoSolution, timeAfterAllDone);
-        animTimeout = setTimeout(setAllowSolveSpeedAndAlgorithms, timeAfterAllDone);
+        animTimeout = setTimeout(allowSolving, timeAfterAllDone);
     }
 
 }
 
-var backtrackingCountToPreventHanging = 0;
+var backtrackingTotalCount = 0;
 var backtrackingDuration = 1;
 var backtrackingTimeCount = 0;
 var animTimeout = 0;
@@ -454,8 +454,8 @@ function backtrackingHelper(matrix, isFixed, row, col, data, currentAlgo)
         return;
 
     // Backtracking is a naive solution.
-    backtrackingCountToPreventHanging++;
-    if(backtrackingCountToPreventHanging > 100000)  // Runs for too long without a solution
+    backtrackingTotalCount++;
+    if(backtrackingTotalCount > 100000)  // Runs for too long without a solution
     {
         data.cont = false;  // Set the flag so that the rest of the recursive calls can stop at "stopping points"
         stopSolveSudokuBacktracking(currentAlgo); // Stop the program
@@ -553,13 +553,172 @@ function succeededNormalAnimation(currentTimeCount, currentDuration)
 
     }
     
-    animTimeout = setTimeout(setAllowSolveSpeedAndAlgorithms, currentTime + (newCount++)*succeededDuration);
+    animTimeout = setTimeout(allowSolving, currentTime + (newCount++)*succeededDuration);
 }
 
 //------------------------------------------------END Backtracking-------------------------------------------------
 //------------------------------------------------END Backtracking-------------------------------------------------
 //------------------------------------------------END Backtracking-------------------------------------------------
 
+// Get elements
+const themeIcon = document.getElementById('theme-icon');
+const colorPickerPopup = document.getElementById('color-picker-popup');
+const applyGradientButton = document.getElementById('apply-gradient');
+const body = document.body;
+themeIcon.addEventListener('mouseenter', () => {
+    colorPickerPopup.style.display = 'block';
+});
+
+// Toggle popup display
+themeIcon.addEventListener('click', () => {
+    colorPickerPopup.style.display = colorPickerPopup.style.display === 'none' ? 'block' : 'none';
+});
+
+// Apply gradient background
+applyGradientButton.addEventListener('click', () => {
+    const color1 = document.getElementById('color1').value;
+    const color2 = document.getElementById('color2').value;
+    body.style.background = `linear-gradient(to right, ${color1}, ${color2})`;
+    gridCells.forEach(cell => {
+        cell.style.borderColor = `${color1}`;
+    });
+    
+    colorPickerPopup.style.display = 'none'; // Hide the popup
+    gradientApplied();
+});
+//popup intro eventlistener
+function setCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+function showPopup() {
+    const popup = document.getElementById('popup');
+    popup.style.display = 'flex'; // Use flex to center it
+    popup.style.opacity = '1'; // Make sure it's visible
+}
+
+// Add event listeners
+document.getElementById('footDiv').addEventListener('click', showPopup);
+
+// Hide the popup when the "Get Started!" button is clicked
+document.getElementById('get-started-btn').addEventListener('click', function() {
+    document.getElementById('popup').style.opacity = '0'; // Fade out
+    setTimeout(() => {
+        document.getElementById('popup').style.display = 'none'; // Hide after fade out
+    }, 300); // Match the transition duration
+});
+window.addEventListener('click', function(event) {
+    const popup = document.getElementById('popup');
+    if (event.target === popup) {
+        popup.style.opacity = '0'; // Fade out
+        setTimeout(() => {
+            popup.style.display = 'none'; // Hide after fade out
+        }, 300); // Match the transition duration
+    }
+});
+document.addEventListener("DOMContentLoaded", function() {
+    const popup = document.getElementById("popup");
+    const getStartedBtn = document.getElementById("get-started-btn");
+
+    if (!getCookie("popupClosed")) {
+        popup.style.display = "flex";
+        getStartedBtn.addEventListener("click", function() {
+            popup.style.opacity = "0";
+            setTimeout(() => {
+                popup.style.display = "none";
+                setCookie("popupClosed", "true", 7); // Cookie expires in 7 days
+            }, 300);
+        });
+    } else {
+        popup.style.display = "none";
+    }
+});
+
+//navigating grid code start
+document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.querySelectorAll('#grid .cell input');
+    
+    grid.forEach((input, index) => {
+        input.addEventListener('keydown', (event) => handleArrowKeys(event, input, grid, index));
+        input.addEventListener('input', (event) => handleInput(event, input, grid));
+    });
+});
+
+function handleArrowKeys(event, currentInput, grid, currentIndex) {
+    const key = event.key;
+    let newIndex = currentIndex;
+
+    switch (key) {
+        case 'ArrowRight':
+            newIndex = currentIndex + 1;
+            break;
+        case 'ArrowLeft':
+            newIndex = currentIndex - 1;
+            break;
+        case 'ArrowDown':
+            newIndex = currentIndex + 9;
+            break;
+        case 'ArrowUp':
+            newIndex = currentIndex - 9;
+            break;
+        default:
+            return; // exit if not an arrow key
+    }
+
+    if (newIndex >= 0 && newIndex < grid.length) {
+        grid[newIndex].focus();
+    }
+
+    event.preventDefault(); // prevent the default action for arrow keys
+}
+
+function handleInput(event, input, grid) {
+    const value = input.value;
+    const inputType = event.inputType;
+
+    // Check for backspace or empty input
+    if (inputType === 'deleteContentBackward' || value === '') {
+        return;
+    }
+
+    setTimeout(() => {
+        // Validate the input is a number between 1 and 9
+        if (!/^[1-9]$/.test(value)) {
+            invalidInput();
+            input.value = ''; // Clear the input if invalid
+        } else {
+            moveToNextCell(input, grid);
+        }
+    }, 0);
+}
+
+function moveToNextCell(input, grid) {
+    const currentIndex = Array.from(grid).indexOf(input);
+    if (input.value && currentIndex !== -1) {
+        const nextIndex = currentIndex + 1;
+        if (nextIndex < grid.length) {
+            grid[nextIndex].focus();
+        }
+    }
+}
+
+//navigating grid code end
 
 //-----------------------------------------------START HelperFunction------------------------------------------------
 //-----------------------------------------------START HelperFunction------------------------------------------------
@@ -579,8 +738,14 @@ function fillCell(row, col, val)
 function cellColoring(row, col)
 {
     inputs[row*9+col].classList.add('succeeded');
+    backNo.style.borderColor = "rgb(120, 255, 0)";
+    backNo.textContent="Number of Backtracking counts: "+backtrackingTotalCount;
+    // Call showToast() when the Sudoku is solved successfully
+    showSuccessToast();
     fireworks.start();
     playSoundSuccess();
+    solve.textContent="Solved";
+    solve.style.backgroundColor="green";
 }
 
 function canBeCorrect(matrix, row, col)
@@ -654,13 +819,32 @@ function verifyInput()
 
             if((val != "" && Number.isNaN(parseInt(val))) || 0 >= parseInt(val) || 9 < parseInt(val))
             {
-                alert("Please enter numbers from 1 to 9");
                 return false;
             }
         }
     }
     return true;
 }
+document.querySelectorAll('#grid input').forEach((input) => {
+    input.addEventListener('input', function(e) {
+        // Get the value of the input and the key code of the event
+        const value = this.value;
+        const keyCode = e.inputType;
+
+        // Check if the key pressed was backspace or if the input is empty
+        if (keyCode === 'deleteContentBackward' || value === '') {
+            return;
+        }
+
+        setTimeout(() => {
+            // Validate that the value is between 1-9
+            if (!/^[1-9]$/.test(value)) {
+                invalidInput(); // Clear the input if invalid
+            } 
+        }, 0);
+    });
+});
+
 
 // Get the current Algorithm from Algorithms dropdown menu
 function getCurrentAlgorithm()
@@ -680,7 +864,7 @@ function playSoundSuccess(){
 function alertNoSolution()
 {
     playSound();
-    alert("No Solution!");
+    noSolToast();
 }
 
 function printBoardOnWeb(matrix)

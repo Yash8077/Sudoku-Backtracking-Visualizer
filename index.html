@@ -3,21 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords"
+    content="Sudoku-Visualizer, SudokuSolver,backtracking, sudoku solver backtracking, sudoku using backtracking, backtacking sudoku visualizer, sudoku, Yash8077, Yashmishra, Yash8077 sudoku solver, Yash8077 sudoku visualizer, sudoku visualizer, sudo ku game">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Sudoku Solver Visualizer</title>
+    <link rel="icon" type="image/x-icon" href="./img/pastim.png">
     <link rel="stylesheet" href="./style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div id="particles-js"></div> 
         <h2 class="logo">Sudoku Solver Visualizer</h2>
         <nav id="nav-bar">
-            <li>
-                <span class="algo-selected">Algorithms</span>
-                <ul class="algo-sub-menu">
-                    <li class="algo-options">Backtracking</li>
-                    </ul>
-        </li>
-        <li id="randomly-fill"><span>Randomize</span>
+        <li id="randomly-fill"><span>Generate Puzzle</span>
             <li id="clear">Clear</li>
             <li>
                 <span class="selected">Speed</span>
@@ -29,8 +27,35 @@
                     </ul>
                     </li>
                     <li id="solve"><span>Solve</span></li>
-                    <pre></pre>
-    </nav>
+                    
+                </nav>
+                <div id="theme-toggle">
+                    <img src="./img/paint.png" alt="Theme Toggle Icon" id="theme-icon">
+                </div>
+   <!-- Theme Toggle Icon -->
+   <div id="popup">
+    <div id="popup-content">
+        <h2>&nbsp;Welcome&nbsp;to&nbsp;Sudoku&nbsp;Backtracking&nbsp;Visualizer!</h2>
+            <ul id="popup-list">
+                <li>🧩 Enter numbers from 1 to 9 in the empty cells of the Sudoku grid.</li>
+                <li>🧠 Use the Backtracking algorithm to solve the Sudoku puzzle.</li>
+                <li>🔄 Click on the "Generate Puzzle" button to randomly fill.</li>
+                <li>🚮 Click on the "Clear" button to clear all the cells.</li>
+                <li>⏱️ Select the desired speed (Fast, Medium, or Slow) for the solving animation.</li>
+                <li>▶️ Click on the "Solve" button to start the solving animation.</li>
+                <li>🎨 Use the color picker popup to apply a gradient to the background.</li>
+            </ul>
+            
+        <button id="get-started-btn">Get Started!</button>
+    </div>
+</div>
+
+<!-- Color Picker Popup -->
+<div id="color-picker-popup">
+    <input type="color" id="color1" name="color1" value="#ff0000">
+    <input type="color" id="color2" name="color2" value="#0000ff">
+    <button id="apply-gradient">Apply Gradient</button>
+</div>
 
     <div id="main-container">
         <div id="algo-info">
@@ -149,10 +174,17 @@
                 <!--row--></tr>
             </table>
         </div>
+        
+        <h2 id="noback"></h2>
+        <h2 id="successToast">✅ Sudoku solved successfully</h2>
+        <h2 id="failToast"></h2>
         <audio id="audio" src="./audio/nosol.mp3" preload="auto"></audio>
         <audio id="audio2" src="./audio/success.mp3" preload="auto"></audio>
         <div class="fireworkDiv"></div>
         <footer id="footer-navbar">
+            <div id="footDiv">
+                <i class="fas fa-info-circle"></i> Instructions
+            </div>
             <ul>
                 <li>&copy; Made by Yash Mishra</li>
                 <li><a href="https://github.com/Yash8077">Github</a></li>

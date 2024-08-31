@@ -4,6 +4,69 @@
     padding: 0px;
     margin: 0px;
 }
+#popup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 300ms;
+    /* Ensure it is centered properly */
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+}
+
+#popup-content {
+    background: linear-gradient(135deg, #ffffffc7 0%, #f2f2f2 100%);
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+    border: 1px solid #ddd;
+}
+
+#popup-content h2 {
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+#popup-content ul {
+    list-style-type: none;
+    margin: 20px 0;
+    padding: 0 20px;
+    text-align: left;
+}
+
+#popup-content li {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+#popup-content button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#popup-content button:hover {
+    background-color: #0056b3;
+}
 
 input
 {
@@ -83,6 +146,19 @@ body {
     margin-top: 1%;
     margin-bottom: 1%;
 }
+#noback{
+    text-align: center; 
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    color:white;
+    border-radius: 30px;
+    border:2px solid rgba(3, 255, 37, 0);
+    width: fit-content;
+    padding:20px;
+}
 #particles-js {
     position: absolute;
     width: 100%;
@@ -109,6 +185,7 @@ body {
     border-radius: 30px;
     width: fit-content;
     margin: 0 auto;
+    user-select: none; 
 }
 
 #nav-bar li 
@@ -120,6 +197,7 @@ body {
     min-width: 105px;     
     font-size: 20px;
     font-weight: bold;
+    user-select: none; 
     
 }
 
@@ -128,17 +206,10 @@ body {
     border-radius: 30px;
     cursor: pointer;
     position: relative;
+    user-select: none; 
 }
 
 
-/* @keyframes underline {
-    from {
-        width: 0;
-    }
-    to {
-        width: 100%;
-    }
-} */
 .fireworkDiv{
     position: absolute;
     top: 0;
@@ -193,6 +264,7 @@ body {
     font-size: 20px;
     font-weight: bold;
     border-radius:30px;
+    user-select: none; 
 }
 /* END Menu-Style.Speed Dropdown */
 
@@ -395,6 +467,30 @@ tr:nth-child(3n) td
     bottom: 0;
     width: 100%;
     z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+}
+
+#footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px; /* Adjust as needed */
+    margin: 0 auto;
+}
+
+#footDiv {
+    display: flex;
+    position:absolute;
+    left:2%;
+    align-items: flex-start;
+}
+
+#footDiv i {
+    margin-right: 8px;
 }
 
 #footer-navbar ul {
@@ -402,12 +498,12 @@ tr:nth-child(3n) td
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    gap: 15px;
 }
 
 #footer-navbar ul li {
-    margin: 0 15px;
-    font-size: 16px;
+    margin: 0;
 }
 
 #footer-navbar ul li a {
@@ -417,4 +513,134 @@ tr:nth-child(3n) td
 
 #footer-navbar ul li a:hover {
     text-decoration: underline;
+}
+
+#successToast {
+    position: fixed;
+    top: 20px; 
+    left: 50%;
+    transform: translateX(-50%); 
+    background-color: #9ef1a1; 
+    color: #3e8f41;
+    border:2px solid; 
+    border-color: 3e8f41;
+    padding: 15px 20px; /* Padding for content */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    font-size: 20px; /* Text size */
+    z-index: 1000; /* Ensure it appears above other content */
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Initially hidden */
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+#successToast.show {
+    opacity: 1; 
+    visibility: visible; 
+    animation: slide-in 0.5s ease-out, slide-out 0.5s ease-out 2.5s; 
+}
+#failToast {
+    position: fixed;
+    top: 20px; 
+    left: 50%;
+    transform: translateX(-50%); 
+    background-color: #f1a49e; 
+    color: #942424;
+    border:2px solid; 
+    border-color: 3e8f41;
+    padding: 15px 20px; /* Padding for content */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    font-size: 20px; /* Text size */
+    z-index: 1000; /* Ensure it appears above other content */
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Initially hidden */
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+#failToast.show {
+    opacity: 1; 
+    visibility: visible; 
+    animation: slide-in 0.5s ease-out, slide-out 0.5s ease-out 2.5s; 
+}
+@keyframes slide-in {
+    from {
+        transform: translateX(-50%) translateY(-100px); 
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0); 
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out {
+    from {
+        transform: translateX(-50%) translateY(0); 
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-50%) translateY(-100px); 
+        opacity: 0;
+    }
+}
+
+/* Theme toggle css */
+#theme-toggle {
+    position: fixed;
+    margin-top:1% ;
+    top:0;
+    right: 20px;
+    cursor: pointer;
+}
+
+#theme-icon {
+    width: 50px; /* Adjust size as needed */
+    height: 50px; /* Adjust size as needed */
+}
+
+#color-picker-popup {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background-color: #ffffff6b;
+    backdrop-filter: blur(8px);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none; /* Initially hidden */
+    z-index: 1000; /* Ensure it appears above other content */
+}
+
+#color-picker-popup input[type="color"] {
+    margin: 5px;
+}
+
+#color-picker-popup button {
+    display: block;
+    margin-top: 10px;
+    padding: 8px 15px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#color-picker-popup button:hover {
+    background-color: #45a049;
+}
+#theme-toggle:hover #color-picker-popup {
+    display: block;
+}
+
+#footDiv {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+#footDiv i {
+    margin-right: 5px;
 }
